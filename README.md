@@ -8,8 +8,8 @@ This is the MERN rebuild of the original Spring Boot demo. The Java implementati
 
 | Surface | URL |
 |---|---|
-| React control room | _pending deployment_ |
-| Express API | _pending deployment_ |
+| React control room | https://upi-without-internet-two.vercel.app |
+| Express API | https://upi-mesh-api-knu5.onrender.com/api/health |
 
 ## What works
 
