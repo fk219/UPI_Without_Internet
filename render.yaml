@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: upi-mesh-api
+    runtime: node
+    plan: free
+    region: singapore
+    rootDir: api
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: MONGODB_URI
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: PACKET_MAX_AGE_SECONDS
+        value: "86400"

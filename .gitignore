@@ -1,8 +1,9 @@
-target/
-.mvn/wrapper/maven-wrapper.jar
-*.class
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+!.env.local.example
+java-reference/target/
 *.log
-.idea/
-*.iml
-.vscode/
 .DS_Store
