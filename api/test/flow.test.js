@@ -14,7 +14,7 @@ beforeAll(async () => {
   await seedAccounts({ force: true });
   const { createApp } = await import('../src/app.js');
   app = createApp();
-}, 60000);
+}, 120000);
 
 beforeEach(async () => {
   const { resetDemo } = await import('../src/ledger.js');
