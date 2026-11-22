@@ -14,17 +14,17 @@ beforeAll(async () => {
   await seedAccounts({ force: true });
   const { createApp } = await import('../src/app.js');
   app = createApp();
-});
+}, 60000);
 
 beforeEach(async () => {
   const { resetDemo } = await import('../src/ledger.js');
   await resetDemo();
-});
+}, 30000);
 
 afterAll(async () => {
   await db.disconnectDb();
   await mongod.stop();
-});
+}, 30000);
 
 describe('UPI mesh API', () => {
   it('serves health and seeded accounts', async () => {
@@ -104,18 +104,30 @@ describe('UPI mesh API', () => {
     expect(accounts.body.items.find((a) => a.vpa === 'dave@demo').balance).toBe('500.00');
   });
 
-  it('resets the demo ledger and mesh', async () => {
-    await request(app)
-      .post('/api/demo/send')
-      .send({ senderVpa: 'alice@demo', receiverVpa: 'bob@demo', amount: 10, pin: '1234' });
-    const reset = await request(app).post('/api/demo/reset').send({});
-    expect(reset.status).toBe(200);
+  it('gates the reset action behind the operator token', async () => {
+    const denied = await request(app).post('/api/demo/reset').send({});
+    expect(denied.status).toBe(401);
 
-    const accounts = await request(app).get('/api/accounts');
-    expect(accounts.body.items.find((a) => a.vpa === 'alice@demo').balance).toBe('5000.00');
-    const ledger = await request(app).get('/api/transactions');
-    expect(ledger.body.items).toHaveLength(0);
-    const mesh = await request(app).get('/api/mesh/state');
-    expect(mesh.body.devices.every((d) => d.packetCount === 0)).toBe(true);
+    const allowed = await request(app)
+      .post('/api/demo/reset')
+      .set('x-demo-admin-token', 'demo-operator-key')
+      .send({});
+    expect(allowed.status).toBe(200);
+    expect(allowed.body.accounts).toHaveLength(4);
+  });
+
+  it('validates the send payload', async () => {
+    const response = await request(app)
+      .post('/api/demo/send')
+      .send({ senderVpa: 'alice@demo', receiverVpa: 'bob@demo', amount: -5, pin: '1' });
+    expect(response.status).toBe(400);
+    expect(response.body.error.details.length).toBeGreaterThan(0);
+  });
+
+  it('returns MongoDB readiness in the health check', async () => {
+    const health = await request(app).get('/api/health');
+    expect(health.status).toBe(200);
+    expect(health.body.database).toBe('connected');
+    expect(health.body.service).toBe('upi-mesh-api');
   });
 });

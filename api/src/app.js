@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { config } from './config.js';
 import { router } from './routes.js';
+import { requestContext } from './observability.js';
+import { apiLimiter } from './security.js';
 
 export function createApp() {
   const app = express();
@@ -12,6 +14,8 @@ export function createApp() {
     .filter(Boolean);
 
   app.disable('x-powered-by');
+  app.set('trust proxy', 1);
+  app.use(requestContext('upi-mesh-api'));
   app.use(helmet({ contentSecurityPolicy: false }));
   app.use(
     cors({
@@ -20,7 +24,7 @@ export function createApp() {
     })
   );
   app.use(express.json({ limit: '512kb' }));
-
+  app.use('/api', apiLimiter);
   app.use('/api', router);
 
   app.use((_req, res) => {

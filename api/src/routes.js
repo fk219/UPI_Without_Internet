@@ -1,5 +1,10 @@
 import { Router } from 'express';
+import mongoose from 'mongoose';
 import { publicKeyBase64 } from './crypto.js';
+import { openapi } from './openapi.js';
+import { demoLimiter, requireOperator, writeLimiter } from './security.js';
+import { validate } from './validate.js';
+import { bridgeIngestSchema, demoSendSchema } from './schemas.js';
 import {
   duplicateStormDemo,
   replayDemoPacket,
@@ -20,7 +25,18 @@ const wrap = (handler) => (req, res, next) => Promise.resolve(handler(req, res, 
 export const router = Router();
 
 router.get('/health', (_req, res) => {
-  res.json({ ok: true, service: 'upi-mesh-api', time: new Date().toISOString() });
+  const databaseReady = mongoose.connection.readyState === 1;
+  res.status(databaseReady ? 200 : 503).json({
+    ok: databaseReady,
+    service: 'upi-mesh-api',
+    database: databaseReady ? 'connected' : 'disconnected',
+    uptimeSeconds: Number(process.uptime().toFixed(1)),
+    time: new Date().toISOString()
+  });
+});
+
+router.get('/openapi.json', (_req, res) => {
+  res.json(openapi);
 });
 
 router.get('/server-key', (_req, res) => {
@@ -33,8 +49,10 @@ router.get('/server-key', (_req, res) => {
 
 router.post(
   '/demo/send',
+  demoLimiter,
+  validate(demoSendSchema),
   wrap(async (req, res) => {
-    const result = sendDemoPacket(req.body || {});
+    const result = sendDemoPacket(req.body);
     res.json(result);
   })
 );
@@ -62,6 +80,8 @@ router.post(
 
 router.post(
   '/demo/reset',
+  requireOperator,
+  writeLimiter,
   wrap(async (_req, res) => {
     await resetDemo();
     res.json({ ok: true, accounts: await listAccounts() });
@@ -95,6 +115,7 @@ router.post('/mesh/gossip', (_req, res) => {
 
 router.post(
   '/mesh/flush',
+  demoLimiter,
   wrap(async (_req, res) => {
     const uploads = mesh.bridgeUploads();
     const results = await Promise.all(
@@ -115,17 +136,19 @@ router.post(
   })
 );
 
-router.post('/mesh/reset', (_req, res) => {
+router.post('/mesh/reset', requireOperator, writeLimiter, (_req, res) => {
   mesh.reset();
   res.json({ ok: true, status: 'mesh cleared' });
 });
 
 router.post(
   '/bridge/ingest',
+  demoLimiter,
+  validate(bridgeIngestSchema),
   wrap(async (req, res) => {
     const bridgeNodeId = req.get('x-bridge-node-id') || 'unknown';
     const hopCount = Number(req.get('x-hop-count') || 0);
-    const result = await ingestPacket(req.body || {}, bridgeNodeId, hopCount);
+    const result = await ingestPacket(req.body, bridgeNodeId, hopCount);
     res.json(result);
   })
 );

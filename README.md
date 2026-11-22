@@ -57,7 +57,8 @@ The demo PIN is any 4+ digits; it is hashed into the instruction but not checked
 
 | Method | Path | Purpose |
 |---|---|---|
-| `GET` | `/api/health` | Health check |
+| `GET` | `/api/health` | Health check with MongoDB readiness |
+| `GET` | `/api/openapi.json` | OpenAPI 3.1 contract |
 | `GET` | `/api/server-key` | RSA public key and scheme metadata |
 | `GET` | `/api/accounts` | Demo balances |
 | `GET` | `/api/transactions` | Latest ledger rows |
@@ -65,11 +66,22 @@ The demo PIN is any 4+ digits; it is hashed into the instruction but not checked
 | `POST` | `/api/demo/tamper` | Corrupt a packet and ingest it |
 | `POST` | `/api/demo/replay` | Ingest the same packet twice |
 | `POST` | `/api/demo/duplicate-storm` | Four concurrent uploads of one packet |
-| `POST` | `/api/demo/reset` | Reset balances, ledger, and mesh |
+| `POST` | `/api/demo/reset` | Reset balances, ledger, and mesh (operator token) |
 | `GET` | `/api/mesh/state` | Device packet counts and claims |
 | `POST` | `/api/mesh/gossip` | One gossip round |
 | `POST` | `/api/mesh/flush` | Upload every online bridge packet |
+| `POST` | `/api/mesh/reset` | Clear the mesh (operator token) |
 | `POST` | `/api/bridge/ingest` | Production-shaped bridge endpoint |
+
+## Operator gate and API contract
+
+Destructive demo actions (`/api/demo/reset`, `/api/mesh/reset`) require the
+`x-demo-admin-token` header. The default demo value is `demo-operator-key`; set
+`ADMIN_TOKEN` on Render to override it. This is a demo gate, not production auth.
+The public lab actions are rate-limited.
+
+The full API contract is served at `/api/openapi.json`. Request IDs are returned in
+the `x-request-id` header, and the API writes one structured JSON log line per request.
 
 ## Run locally
 
@@ -96,13 +108,14 @@ npm run dev
 npm test
 ```
 
-Seven API tests cover health, seeding, settlement, duplicate storms, replay, tamper rejection, insufficient funds, and reset.
+Nine API tests cover health and MongoDB readiness, seeding, settlement, duplicate storms, replay, tamper rejection, insufficient funds, operator-token gating, payload validation, and reset.
 
 ## Deployment
 
 - **Frontend:** Vercel static deployment, proxying `/api` to the Render API.
-- **API:** Render web service from `api/`.
+- **API:** Render web service from `api/`; a production-style `Dockerfile` is included.
 - **Database:** MongoDB Atlas database `upimesh` on the existing `Cluster0`.
+- **CI:** GitHub Actions runs API tests and the frontend build on every push.
 
 ## Honest limitations
 
