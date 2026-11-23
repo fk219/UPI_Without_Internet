@@ -15,21 +15,59 @@ export function HowItWorks({ data }) {
     <div className="page">
       <header className="page-head">
         <div>
-          <p className="eyebrow">HOW IT WORKS / THE SHORT VERSION</p>
+          <p className="eyebrow">GUIDE / WHAT IT DOES + HOW TO USE IT</p>
           <h1>
-            Deferred settlement,
+            Send money through strangers.
             <br />
-            <em>without trust in the room.</em>
+            <em>Settle it exactly once.</em>
           </h1>
           <p className="lede">
-            The mesh only carries ciphertext. The backend is the first place a payment becomes
-            readable, and the first place it can settle.
+            Mesh / UPI is a live simulation of deferred settlement. A payment is encrypted on one
+            phone, carried as ciphertext by other phones, and only becomes money when a bridge reaches
+            the backend. Use this page to understand the model and the control room to run it.
           </p>
         </div>
         <Link to="/" className="back-link">
           <ArrowLeft size={14} /> Back to the control room
         </Link>
       </header>
+
+      <section className="quick-guide">
+        <div className="quick-guide-head">
+          <p className="eyebrow">START HERE / FOUR MOVES</p>
+          <h2>How to run the demo.</h2>
+          <p>
+            The control room is a safe sandbox. Balances are seeded, the PIN is a demo PIN, and a reset
+            restores everything. Nothing leaves the browser and the demo API.
+          </p>
+        </div>
+        <div className="quick-guide-grid">
+          <article>
+            <span>01</span>
+            <h3>Seal a payment</h3>
+            <p>Pick a sender and receiver, enter an amount and any 4+ digit demo PIN, then seal the packet.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Move the packet</h3>
+            <p>Use Gossip one round to copy ciphertext between phones, or Flush the bridges to reach 4G.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Break it</h3>
+            <p>Run Tamper, Replay, or Duplicate storm and watch the ledger refuse the invalid settlement.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Read the ledger</h3>
+            <p>Open the Ledger to see settled and rejected entries, then reset the demo to start over.</p>
+          </article>
+        </div>
+        <div className="quick-guide-actions">
+          <Link to="/" className="btn primary">Open the control room <ArrowRight size={15} /></Link>
+          <Link to="/ledger" className="btn secondary">View the ledger</Link>
+        </div>
+      </section>
 
       <section className="pipeline">
         <div className="pipeline-step">

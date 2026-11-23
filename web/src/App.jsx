@@ -18,7 +18,7 @@ function MeshMark() {
   );
 }
 
-function Shell({ children, mesh, action, error, reset }) {
+function Shell({ children, mesh, action, error, reset, onRetry }) {
   const online = !error;
   return (
     <div className="app-shell">
@@ -39,7 +39,7 @@ function Shell({ children, mesh, action, error, reset }) {
             <BookOpen size={15} /> Ledger
           </NavLink>
           <NavLink to="/how-it-works">
-            <GitBranch size={15} /> How it works
+            <GitBranch size={15} /> Guide
           </NavLink>
         </nav>
 
@@ -74,14 +74,17 @@ function Shell({ children, mesh, action, error, reset }) {
         <nav className="mobile-nav" aria-label="Primary mobile">
           <NavLink to="/" end>Control</NavLink>
           <NavLink to="/ledger">Ledger</NavLink>
-          <NavLink to="/how-it-works">How</NavLink>
+          <NavLink to="/how-it-works">Guide</NavLink>
         </nav>
       </div>
 
       <main className="main">
         {error && (
           <div className="error-banner" role="alert">
-            <strong>Connection issue.</strong> {error}
+            <span><strong>Connection issue.</strong> {error}</span>
+            <button type="button" className="btn secondary small" onClick={onRetry}>
+              <RefreshCw size={12} /> Retry
+            </button>
           </div>
         )}
         {children}
@@ -93,7 +96,13 @@ function Shell({ children, mesh, action, error, reset }) {
 export default function App() {
   const data = useMesh();
   return (
-    <Shell mesh={data.mesh} action={data.action} error={data.error} reset={data.reset}>
+    <Shell
+      mesh={data.mesh}
+      action={data.action}
+      error={data.error}
+      reset={data.reset}
+      onRetry={data.refresh}
+    >
       <Routes>
         <Route path="/" element={<ControlRoom data={data} />} />
         <Route path="/ledger" element={<Ledger data={data} />} />
