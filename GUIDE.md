@@ -5,7 +5,7 @@
 Mesh / UPI is a live simulation of offline payments with deferred settlement. A payment is encrypted on one phone, carried as ciphertext by other phones, and settled exactly once when any phone reaches a 4G bridge.
 
 - **Live app:** https://meshpay.furqankhan.dev
-- **API:** https://upi-mesh-api-knu5.onrender.com
+- **API:** https://mesh-pay-api.onrender.com
 
 This is a systems experiment, not a real UPI rail. No real money moves.
 

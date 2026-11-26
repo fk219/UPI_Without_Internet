@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://upi-mesh-api-knu5.onrender.com/api/:path*"
+      "destination": "https://mesh-pay-api.onrender.com/api/:path*"
     },
     {
       "source": "/:path*",

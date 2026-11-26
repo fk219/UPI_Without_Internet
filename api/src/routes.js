@@ -28,7 +28,7 @@ router.get('/health', (_req, res) => {
   const databaseReady = mongoose.connection.readyState === 1;
   res.status(databaseReady ? 200 : 503).json({
     ok: databaseReady,
-    service: 'upi-mesh-api',
+    service: 'mesh-pay-api',
     database: databaseReady ? 'connected' : 'disconnected',
     uptimeSeconds: Number(process.uptime().toFixed(1)),
     time: new Date().toISOString()

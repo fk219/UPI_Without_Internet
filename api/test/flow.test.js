@@ -128,6 +128,6 @@ describe('UPI mesh API', () => {
     const health = await request(app).get('/api/health');
     expect(health.status).toBe(200);
     expect(health.body.database).toBe('connected');
-    expect(health.body.service).toBe('upi-mesh-api');
+    expect(health.body.service).toBe('mesh-pay-api');
   });
 });

@@ -14,7 +14,7 @@ This is the MERN rebuild of the original Spring Boot demo. The Java implementati
 | Surface | URL |
 |---|---|
 | React control room | https://meshpay.furqankhan.dev |
-| Express API | https://upi-mesh-api-knu5.onrender.com/api/health |
+| Express API | https://mesh-pay-api.onrender.com/api/health |
 
 ## Screenshots
 

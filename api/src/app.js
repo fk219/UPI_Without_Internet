@@ -15,7 +15,7 @@ export function createApp() {
 
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
-  app.use(requestContext('upi-mesh-api'));
+  app.use(requestContext('mesh-pay-api'));
   app.use(helmet({ contentSecurityPolicy: false }));
   app.use(
     cors({
