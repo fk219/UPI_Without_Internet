@@ -9,7 +9,7 @@ let db;
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create();
   db = await import('../src/db.js');
-  await db.connectDb(mongod.getUri('upimesh_test'));
+  await db.connectDb(mongod.getUri('meshpay_test'));
   const { seedAccounts } = await import('../src/ledger.js');
   await seedAccounts({ force: true });
   const { createApp } = await import('../src/app.js');

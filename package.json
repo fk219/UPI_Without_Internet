@@ -1,13 +1,13 @@
 {
-  "name": "upi-offline-mesh",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Offline UPI mesh routing demo — React, Express, MongoDB",
-  "scripts": {
-    "install:all": "npm install --prefix api && npm install --prefix web",
-    "dev:api": "npm --prefix api run dev",
-    "dev:web": "npm --prefix web run dev",
-    "build": "npm --prefix web run build",
-    "test": "npm --prefix api test"
-  }
+    "name":  "mesh-pay",
+    "version":  "1.0.0",
+    "private":  true,
+    "description":  "Offline UPI mesh routing demo â€” React, Express, MongoDB",
+    "scripts":  {
+                    "install:all":  "npm install --prefix api \u0026\u0026 npm install --prefix web",
+                    "dev:api":  "npm --prefix api run dev",
+                    "dev:web":  "npm --prefix web run dev",
+                    "build":  "npm --prefix web run build",
+                    "test":  "npm --prefix api test"
+                }
 }

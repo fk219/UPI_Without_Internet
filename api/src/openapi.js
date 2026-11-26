@@ -1,7 +1,7 @@
 export const openapi = {
   openapi: '3.1.0',
   info: {
-    title: 'UPI Offline Mesh API',
+    title: 'MeshPay API',
     version: '1.0.0',
     description:
       'Encrypted packet ingestion and idempotent deferred settlement for the UPI mesh demo. The operator token gates reset actions only; the demo lab actions are public and rate-limited.'

@@ -1759,3 +1759,35 @@ h2 {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------------------------------------------------------------- */
+/* Theme switch: daylight settlement room                           */
+/* ---------------------------------------------------------------- */
+html[data-theme="light"] {
+  --bg: #f2f6f2;
+  --surface: #ffffff;
+  --surface-2: #eaf0ea;
+  --surface-3: #dfe8df;
+  --line: rgba(20, 32, 26, 0.12);
+  --line-strong: rgba(20, 32, 26, 0.22);
+  --ink: #101c16;
+  --muted: #566b60;
+  --faint: #6b8075;
+  --signal: #4d7a00;
+  --cyan: #007a76;
+  --amber: #9a6200;
+  --red: #b83a2c;
+  --violet: #6b4fd1;
+  color-scheme: light;
+}
+
+html[data-theme="light"] body {
+  background:
+    radial-gradient(circle at 78% -10%, rgba(0, 122, 118, 0.08), transparent 32rem),
+    radial-gradient(circle at 5% 40%, rgba(77, 122, 0, 0.05), transparent 28rem),
+    var(--bg);
+}
+
+html[data-theme="light"] ::selection {
+  background: rgba(77, 122, 0, 0.22);
+}

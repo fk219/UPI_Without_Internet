@@ -1,15 +1,26 @@
-# UPI Offline Mesh — MERN
+# MeshPay — MERN
 
 A live simulation of **deferred UPI settlement through a Bluetooth-style mesh**. A sender encrypts a payment on their phone, nearby phones carry the ciphertext, and the first phone to reach 4G uploads it. The backend decrypts, checks freshness, and settles exactly once.
 
 This is the MERN rebuild of the original Spring Boot demo. The Java implementation is preserved in [`java-reference/`](java-reference/) for comparison.
 
+## Credits and my contribution
+
+- Original Spring Boot demo: `perryvegehan`, preserved in `java-reference/` for comparison.
+- The MERN rebuild, hybrid encryption, mesh simulator, idempotent ledger, React control room, tests, Dockerfile, and deployment are the work presented in this repository.
+
 ## Live demo
 
 | Surface | URL |
 |---|---|
-| React control room | https://upi-without-internet-two.vercel.app |
+| React control room | https://meshpay.furqankhan.dev |
 | Express API | https://upi-mesh-api-knu5.onrender.com/api/health |
+
+## Screenshots
+
+| Control room | Ledger |
+|---|---|
+| ![MeshPay control room](docs/home.png) | ![MeshPay ledger](docs/ledger.png) |
 
 ## What works
 
@@ -114,7 +125,7 @@ Nine API tests cover health and MongoDB readiness, seeding, settlement, duplicat
 
 - **Frontend:** Vercel static deployment, proxying `/api` to the Render API.
 - **API:** Render web service from `api/`; a production-style `Dockerfile` is included.
-- **Database:** MongoDB Atlas database `upimesh` on the existing `Cluster0`.
+- **Database:** MongoDB Atlas database `meshpay` on the existing `Cluster0`.
 - **CI:** GitHub Actions runs API tests and the frontend build on every push.
 
 ## Honest limitations
@@ -126,3 +137,7 @@ Nine API tests cover health and MongoDB readiness, seeding, settlement, duplicat
 - This is not connected to NPCI or a real bank core.
 
 The cryptography and idempotency code are production-shaped; the surrounding infrastructure is deliberately demo-sized.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
